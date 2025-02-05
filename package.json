@@ -8,8 +8,8 @@
     "test:verbose": "jest --passWithNoTests",
     "test:unit": "npm test -- --watch -c jest-unit-config.js",
     "test:integration": "npm test -- --watch -c jest-integration-config.js",
-	  "test:staged": "npm test -- --findRelatedTests",
-	  "test:ci": "npm test -- --coverage"
+    "test:staged": "npm test -- --findRelatedTests",
+    "test:ci": "npm test -- --coverage"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +17,7 @@
   "devDependencies": {
     "@types/jest": "^29.5.14",
     "@types/node": "22.10.6",
+    "@types/validator": "^13.12.2",
     "eslint-config-love": "44.0.0",
     "git-commit-msg-linter": "2.3.11",
     "husky": "^9.1.7",
@@ -24,5 +25,8 @@
     "lint-staged": "^15.4.0",
     "ts-jest": "^29.2.5",
     "typescript": "4.7.4"
+  },
+  "dependencies": {
+    "validator": "^13.12.0"
   }
 }
