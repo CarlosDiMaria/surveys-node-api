@@ -1,12 +1,10 @@
 import { ServerError } from '../erros'
 import { type HttpResponse } from '../protocols'
 
-export const succes = (message: string): HttpResponse => {
+export const ok = (data: any): HttpResponse => {
   return {
     statusCode: 200,
-    body: {
-      message
-    }
+    body: data
   }
 }
 
