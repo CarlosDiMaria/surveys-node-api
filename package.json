@@ -4,7 +4,7 @@
   "description": "Projeto de estudos que tem por objetivo criar uma API de enquetes em Node.JS",
   "main": "index.js",
   "scripts": {
-    "test": "jest --passWithNoTests",
+    "test": "jest --passWithNoTests --watch",
 	"test:staged": "jest --passWithNoTests"
   },
   "keywords": [],
