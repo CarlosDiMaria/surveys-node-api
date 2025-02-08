@@ -30,7 +30,7 @@ export class DbAuthentication implements Authentication {
     if (!isPasswordValid) return null
     const token = await this.tokenGenerator.generate(id)
     if (!token) return null
-    await this.updateAccessTokenRepositoryStub.update(id, token)
+    await this.updateAccessTokenRepositoryStub.updateAccessToken(id, token)
     return token
   }
 }
