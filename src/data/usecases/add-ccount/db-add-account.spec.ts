@@ -1,12 +1,12 @@
 import { AccountModel } from '../../../domain/models/account'
 import { AddAccountModel } from '../../../domain/usecases/add-account'
 import { AddAccountRepository } from '../../protocols/add-account-repository'
-import { Encrypter } from '../../protocols/encrypter'
+import { Hasher } from '../../protocols/hasher'
 import { DbAddAccount } from './db-add-account'
 
 describe('DbAddAccount UseCase', () => {
   interface SutTypes {
-    encrypterStub: Encrypter
+    encrypterStub: Hasher
     sut: DbAddAccount
     addAccountRepositoryStub: AddAccountRepository
   }
@@ -26,9 +26,9 @@ describe('DbAddAccount UseCase', () => {
     return new AddAccountRepositoryStub()
   }
 
-  const makeEncrypter = (): Encrypter => {
-    class EncrypterStub implements Encrypter {
-      async encrypt (value: string): Promise<string> {
+  const makeEncrypter = (): Hasher => {
+    class EncrypterStub implements Hasher {
+      async hash (value: string): Promise<string> {
         return new Promise(resolve => { resolve('valid_hashed_password') })
       }
     }
@@ -46,9 +46,9 @@ describe('DbAddAccount UseCase', () => {
     }
   }
 
-  test('Should call Encrypter with correct password', async () => {
+  test('Should call Hasher with correct password', async () => {
     const { sut, encrypterStub } = makeSut()
-    const encryptSpy = jest.spyOn(encrypterStub, 'encrypt')
+    const encryptSpy = jest.spyOn(encrypterStub, 'hash')
     const accountData = {
       name: 'valid_name',
       email: 'valid_mail@mail.com',
@@ -58,9 +58,9 @@ describe('DbAddAccount UseCase', () => {
     expect(encryptSpy).toHaveBeenCalledWith('valid_password')
   })
 
-  test('Should throw if encrypter throws', async () => {
+  test('Should throw if hasher throws', async () => {
     const { sut, encrypterStub } = makeSut()
-    jest.spyOn(encrypterStub, 'encrypt').mockReturnValueOnce(
+    jest.spyOn(encrypterStub, 'hash').mockReturnValueOnce(
       new Promise((resolve, reject) => { reject(new Error()) })
     )
     const accountData = {
