@@ -7,14 +7,15 @@ import { LogErrorMongoRepository } from '../../infra/db/mongodb/log-error-reposi
 import { LoginController } from '../../presentation/controllers/login/login'
 import { Controller } from '../../presentation/protocols'
 import { EmailValidatorAdapter } from '../../utils/email-validator-adapter'
+import env from '../config/env'
 import { LogControllerDecorator } from '../decorators/log-controller-decorator'
 
-export const makeSignUpController = (): Controller => {
+export const makeLoginController = (): Controller => {
   const salt = 12
   const emailValidator = new EmailValidatorAdapter()
   const loadAccountByEmailRepository = new AccountMongoRepository()
   const hashComparer = new BcryptAdapter(salt)
-  const tokenGenerator = new JwtAdapter('')
+  const tokenGenerator = new JwtAdapter(env.jwtSecret)
   const authentication = new DbAuthentication(loadAccountByEmailRepository, hashComparer, tokenGenerator, loadAccountByEmailRepository)
   const signUpController = new LoginController(emailValidator, authentication)
   const logErrorMongoRepository = new LogErrorMongoRepository()
