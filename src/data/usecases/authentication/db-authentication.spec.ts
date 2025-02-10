@@ -1,8 +1,8 @@
 import { AccountModel } from '../../../domain/models/account'
 import { Authentication } from '../../../domain/usecases/authentication'
+import { Encrypter } from '../../protocols/encrypter'
 import { HashComparer } from '../../protocols/hash-comparer'
 import { LoadAccountByEmailRepository } from '../../protocols/load-account-repository'
-import { TokenGenerator } from '../../protocols/token-generator'
 import { UpdateAccessTokenRepository } from '../../protocols/update-access-token-repository'
 import { DbAuthentication } from './db-authentication'
 
@@ -11,7 +11,7 @@ describe('DbAuthentication UseCase', () => {
     sut: Authentication
     loadAccountByEmailRepository: LoadAccountByEmailRepository
     hashComparerStub: HashComparer
-    tokenGeneratorStub: TokenGenerator
+    tokenGeneratorStub: Encrypter
     updateAccessTokenRepositoryStub: UpdateAccessTokenRepository
   }
 
@@ -20,8 +20,8 @@ describe('DbAuthentication UseCase', () => {
       async updateAccessToken (id: string, token: string): Promise<void> {
       }
     }
-    class TokenGeneratorStub implements TokenGenerator {
-      async generate (id: string): Promise<string | null> {
+    class TokenGeneratorStub implements Encrypter {
+      async encrypt (id: string): Promise<string | null> {
         return new Promise(resolve => resolve('any_token'))
       }
     }
@@ -108,21 +108,21 @@ describe('DbAuthentication UseCase', () => {
 
   test('Should call TokenGenerator with correct value', async () => {
     const { sut, tokenGeneratorStub } = makeSut()
-    const generateSpy = jest.spyOn(tokenGeneratorStub, 'generate')
+    const generateSpy = jest.spyOn(tokenGeneratorStub, 'encrypt')
     await sut.auth('any_mail@mail.com', 'any_password')
     expect(generateSpy).toHaveBeenCalledWith('any_id')
   })
 
   test('Should throw if TokenGenerator throws', async () => {
     const { sut, tokenGeneratorStub } = makeSut()
-    jest.spyOn(tokenGeneratorStub, 'generate').mockReturnValueOnce(new Promise((resolve, reject) => { reject(new Error()) }))
+    jest.spyOn(tokenGeneratorStub, 'encrypt').mockReturnValueOnce(new Promise((resolve, reject) => { reject(new Error()) }))
     const promise = sut.auth('any_mail@mail.com', 'any_password')
     await expect(promise).rejects.toThrow()
   })
 
   test('Should return null if TokenGenerator returns null', async () => {
     const { sut, tokenGeneratorStub } = makeSut()
-    jest.spyOn(tokenGeneratorStub, 'generate').mockReturnValueOnce(new Promise(resolve => resolve(null)))
+    jest.spyOn(tokenGeneratorStub, 'encrypt').mockReturnValueOnce(new Promise(resolve => resolve(null)))
     const response = await sut.auth('any_mail@mail.com', 'any_password')
     expect(response).toBeNull()
   })
