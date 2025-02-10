@@ -4,7 +4,9 @@
   "description": "Projeto de estudos que tem por objetivo criar uma API de enquetes em Node.JS",
   "main": "index.js",
   "scripts": {
-    "start": "sucrase-node src/main/server.ts",
+    "start": "node ./dist/main/server.js",
+    "build": "tsc",
+    "dev": "sucrase-node src/main/server.ts",
     "test": "jest --passWithNoTests --noStackTrace --runInBand",
     "test:verbose": "jest --passWithNoTests",
     "test:unit": "npm test -- -c jest-unit-config.js",
@@ -22,6 +24,7 @@
     "@types/jest": "^29.5.14",
     "@types/jsonwebtoken": "^9.0.8",
     "@types/mongodb": "^4.0.6",
+    "@types/node": "^16.18.50",
     "@types/supertest": "^6.0.2",
     "@types/validator": "^13.12.2",
     "eslint-config-love": "44.0.0",
