@@ -17,8 +17,8 @@ export const makeLoginController = (): Controller => {
   const hashComparer = new BcryptAdapter(salt)
   const tokenGenerator = new JwtAdapter(env.jwtSecret)
   const authentication = new DbAuthentication(loadAccountByEmailRepository, hashComparer, tokenGenerator, loadAccountByEmailRepository)
-  const signUpController = new LoginController(emailValidator, authentication)
+  const loginController = new LoginController(emailValidator, authentication)
   const logErrorMongoRepository = new LogErrorMongoRepository()
   const logErrorRepository = new DbLogErrorRepository(logErrorMongoRepository)
-  return new LogControllerDecorator(signUpController, logErrorRepository)
+  return new LogControllerDecorator(loginController, logErrorRepository)
 }

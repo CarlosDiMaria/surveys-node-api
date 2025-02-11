@@ -1,15 +1,14 @@
 import { AddAccount, EmailValidator, HttpRequest, HttpResponse, Controller } from '../../controllers/signup/signup-protocols'
-import { badRequest, serverError, ok } from '../../helpers/http-helper'
+import { badRequest, serverError, ok, unauthorized } from '../../helpers/http-helper'
 import { InvalidParamError, MissingParamError } from '../../erros'
+import { Authentication } from '../../../domain/usecases/authentication'
 
 export class SignUpController implements Controller {
-  private readonly emailValidator: EmailValidator
-  private readonly addAccount: AddAccount
-
-  constructor (emailValidator: EmailValidator, addAccount: AddAccount) {
-    this.emailValidator = emailValidator
-    this.addAccount = addAccount
-  }
+  constructor (
+    private readonly emailValidator: EmailValidator,
+    private readonly addAccount: AddAccount,
+    private readonly authentication: Authentication
+  ) {}
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
@@ -27,12 +26,14 @@ export class SignUpController implements Controller {
       if (password !== passwordConfirmation) {
         return badRequest(new InvalidParamError('password confirmation is incorrect'))
       }
-      const account = await this.addAccount.add({
+      await this.addAccount.add({
         name,
         email,
         password
       })
-      return ok(account)
+      const accessToken = await this.authentication.auth(email, password)
+      if (!accessToken) return unauthorized()
+      return ok({ accessToken })
     } catch (error) {
       return serverError(error)
     }
