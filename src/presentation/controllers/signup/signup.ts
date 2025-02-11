@@ -1,7 +1,8 @@
 import { AddAccount, EmailValidator, HttpRequest, HttpResponse, Controller } from '../../controllers/signup/signup-protocols'
-import { badRequest, serverError, ok, unauthorized } from '../../helpers/http-helper'
+import { badRequest, serverError, ok, unauthorized, conflict } from '../../helpers/http-helper'
 import { InvalidParamError, MissingParamError } from '../../erros'
 import { Authentication } from '../../../domain/usecases/authentication'
+import { ConflictError } from '../../erros/conflict-error'
 
 export class SignUpController implements Controller {
   constructor (
@@ -26,11 +27,14 @@ export class SignUpController implements Controller {
       if (password !== passwordConfirmation) {
         return badRequest(new InvalidParamError('password confirmation is incorrect'))
       }
-      await this.addAccount.add({
+      const newAccount = await this.addAccount.add({
         name,
         email,
         password
       })
+      if (!newAccount) {
+        return conflict(new ConflictError('account already exists'))
+      }
       const accessToken = await this.authentication.auth(email, password)
       if (!accessToken) return unauthorized()
       return ok({ accessToken })

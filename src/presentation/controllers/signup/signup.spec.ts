@@ -3,6 +3,7 @@ import { ServerError, InvalidParamError, MissingParamError } from '../../erros'
 import { AddAccount, AddAccountModel, AccountModel, EmailValidator } from '../signup/signup-protocols'
 import { Authentication } from '../../../domain/usecases/authentication'
 import { UnauthorizedError } from '../../erros/unauthorized-error'
+import { ConflictError } from '../../erros/conflict-error'
 
 interface SutTypes {
   sut: SignUpController
@@ -259,5 +260,21 @@ describe('SignUp Controller', () => {
     const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(200)
     expect((httpResponse.body)).toEqual({ accessToken: 'any_token' })
+  })
+
+  test('Should return 409 if account already exists', async () => {
+    const { sut, addAccountStub } = makeSut()
+    jest.spyOn(addAccountStub, 'add').mockReturnValueOnce(new Promise(resolve => resolve(null)))
+    const httpRequest = {
+      body: {
+        name: 'valid_name',
+        email: 'valid_email@mail.com',
+        password: 'valid_password',
+        passwordConfirmation: 'valid_password'
+      }
+    }
+    const httpResponse = await sut.handle(httpRequest)
+    expect(httpResponse.statusCode).toBe(409)
+    expect(httpResponse.body).toEqual(new ConflictError('account already exists'))
   })
 })

@@ -29,3 +29,10 @@ export const serverError = (error: Error): HttpResponse => {
     body: new ServerError(error.stack ?? '')
   }
 }
+
+export const conflict = (error: Error): HttpResponse => {
+  return {
+    statusCode: 409,
+    body: error
+  }
+}
