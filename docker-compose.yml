@@ -15,8 +15,10 @@ services:
     image: enquetes-node-api
     volumes: 
       - ./dist:/usr/src/enquetes-node-api/dist
-    command: npm start
+      - ./package.json:/usr/src/enquetes-node-api/package.json
+    command: npm run debug
     ports:
       - "5050:5050"
+      - "9222:9222"
     links:
       - mongo
