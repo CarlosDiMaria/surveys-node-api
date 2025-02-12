@@ -9,6 +9,13 @@ export const ok = (data: any): HttpResponse => {
   }
 }
 
+export const noContentOk = (): HttpResponse => {
+  return {
+    statusCode: 204,
+    body: {}
+  }
+}
+
 export const badRequest = (error: Error): HttpResponse => {
   return {
     statusCode: 400,
