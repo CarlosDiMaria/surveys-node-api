@@ -66,4 +66,43 @@ describe('Account Mongo Repository', () => {
     expect(updatedAccount).toBeTruthy()
     expect(updatedAccount?.accessToken).toBe('any_token')
   })
+
+  test('Should return an account on loadByToken sucess without role', async () => {
+    const sut = new AccountMongoRepository()
+    await accountCollection.insertOne({
+      name: 'any_name',
+      email: 'any_email@mail.com',
+      password: 'any_password',
+      accessToken: 'any_token'
+    })
+    const account = await sut.loadByToken('any_token')
+    expect(account).toBeTruthy()
+    expect(account?.id).toBeTruthy()
+    expect(account?.name).toEqual('any_name')
+    expect(account?.email).toEqual('any_email@mail.com')
+    expect(account?.password).toEqual('any_password')
+  })
+
+  test('Should return an account on loadByToken sucess with role', async () => {
+    const sut = new AccountMongoRepository()
+    await accountCollection.insertOne({
+      name: 'any_name',
+      email: 'any_email@mail.com',
+      password: 'any_password',
+      accessToken: 'any_token',
+      role: 'any_role'
+    })
+    const account = await sut.loadByToken('any_token', 'any_role')
+    expect(account).toBeTruthy()
+    expect(account?.id).toBeTruthy()
+    expect(account?.name).toEqual('any_name')
+    expect(account?.email).toEqual('any_email@mail.com')
+    expect(account?.password).toEqual('any_password')
+  })
+
+  test('Should return null if no account is found', async () => {
+    const sut = new AccountMongoRepository()
+    const account = await sut.loadByToken('any_token', 'any_role')
+    expect(account).toBeNull()
+  })
 })
