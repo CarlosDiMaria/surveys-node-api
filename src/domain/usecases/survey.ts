@@ -1,3 +1,5 @@
+import { SurveyModel } from '../models/survey'
+
 export interface SurveyAnswer {
   image: string
   answer: string
@@ -11,4 +13,8 @@ export interface AddSurveyModel {
 
 export interface AddSurvey {
   add: (data: AddSurveyModel) => Promise<boolean>
+}
+
+export interface LoadSurvey {
+  loadSurveys: () => Promise<SurveyModel[]>
 }
