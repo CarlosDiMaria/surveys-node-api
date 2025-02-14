@@ -16,7 +16,8 @@ describe('DbSurvey', () => {
     answers: [{
       answer: 'any_answer',
       image: 'any_image'
-    }]
+    }],
+    date: new Date('2023-10-05T12:34:56Z')
   }
 
   beforeEach(() => {
@@ -32,7 +33,8 @@ describe('DbSurvey', () => {
       answers: [{
         answer: 'any_answer',
         image: 'any_image'
-      }]
+      }],
+      date: new Date('2023-10-05T12:34:56Z')
     })
   })
 

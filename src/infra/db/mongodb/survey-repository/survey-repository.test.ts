@@ -6,7 +6,7 @@ import { MongoHelper } from '../mongo-helper/mongo-helper'
 describe('SurveyMongoRepository Integration Tests', () => {
   let surveyCollection: Collection
   const surveyMongoRepository = new SurveyMongoRepository()
-  const surveyData = { question: 'any_question', answers: [{ answer: 'any_answer', image: 'any_image' }] }
+  const surveyData = { question: 'any_question', answers: [{ answer: 'any_answer', image: 'any_image' }], date: new Date() }
 
   beforeAll(async () => {
     await MongoHelper.connect(env.mongoUrl)

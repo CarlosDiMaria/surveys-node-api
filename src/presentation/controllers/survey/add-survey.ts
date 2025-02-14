@@ -15,7 +15,11 @@ export class AddSurveyController implements Controller {
       if (!Array.isArray(answers) || answers.some(a => !a?.answer)) {
         return badRequest(new MissingParamError('answer'))
       }
-      const isSurveyCreated = await this.dbSurvey.add({ question, answers })
+      const isSurveyCreated = await this.dbSurvey.add({
+        question,
+        answers,
+        date: new Date()
+      })
       return isSurveyCreated ? noContentOk() : serverError(new ServerError('survey not created'))
     } catch (error) {
       return serverError(new ServerError(error.message || 'Internal server error'))
