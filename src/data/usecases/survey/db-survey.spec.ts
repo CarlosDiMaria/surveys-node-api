@@ -1,16 +1,34 @@
-import { AddSurvey, AddSurveyModel } from '../../../domain/usecases/survey'
-import { AddSurveyRepository } from '../../protocols/survey-repository'
+import { AddSurveyModel } from '../../../domain/usecases/survey'
+import { SurveyRepository } from '../../protocols/survey-repository'
 import { DbSurvey } from './db-survey'
 
-const makeSurveyRepositoryStub = (): AddSurveyRepository => {
+const makeSurveyRepositoryStub = (): jest.Mocked<SurveyRepository> => {
   return {
-    add: jest.fn().mockResolvedValue(true)
+    add: jest.fn().mockResolvedValue(true),
+    loadSurveys: jest.fn().mockResolvedValue([
+      {
+        question: 'any_question',
+        answers: [{
+          image: 'any_image',
+          answer: 'any_answer'
+        }],
+        date: new Date('2023-10-05T12:34:56Z')
+      },
+      {
+        question: 'any_question',
+        answers: [{
+          image: 'any_image',
+          answer: 'any_answer'
+        }],
+        date: new Date('2023-10-05T12:34:56Z')
+      }
+    ])
   }
 }
 
 describe('DbSurvey', () => {
-  let surveyRepositoryStub
-  let dbSurvey: AddSurvey
+  let surveyRepositoryStub: jest.Mocked<SurveyRepository>
+  let dbSurvey: SurveyRepository
   const addSurvey: AddSurveyModel = {
     question: 'any_question',
     answers: [{
@@ -44,8 +62,40 @@ describe('DbSurvey', () => {
     expect(result).toBe(false)
   })
 
-  test('should handle errors from the repository', async () => {
+  test('should handle add errors from the repository', async () => {
     surveyRepositoryStub.add.mockRejectedValue(new Error('Database error'))
     await expect(dbSurvey.add(addSurvey)).rejects.toThrow('Database error')
+  })
+
+  test('should return surveys when loadSurveys is successfull', async () => {
+    const surveys = await dbSurvey.loadSurveys()
+    expect(surveys).toEqual([
+      {
+        question: 'any_question',
+        answers: [{
+          image: 'any_image',
+          answer: 'any_answer'
+        }],
+        date: new Date('2023-10-05T12:34:56Z')
+      },
+      {
+        question: 'any_question',
+        answers: [{
+          image: 'any_image',
+          answer: 'any_answer'
+        }],
+        date: new Date('2023-10-05T12:34:56Z')
+      }
+    ])
+  })
+
+  test('should call loadSurveys', async () => {
+    await dbSurvey.loadSurveys()
+    expect(surveyRepositoryStub.loadSurveys).toHaveBeenCalled()
+  })
+
+  test('should handle loadSurveys errors from the repository', async () => {
+    surveyRepositoryStub.loadSurveys.mockRejectedValue(new Error('Database error'))
+    await expect(dbSurvey.loadSurveys()).rejects.toThrow('Database error')
   })
 })
