@@ -16,6 +16,6 @@ export class BcryptAdapter implements Hasher, HashComparer {
 
   async compare (password: string, hashedPassword: string): Promise<boolean> {
     const isValid = await bcrypt.compare(password, hashedPassword)
-    return new Promise(resolve => resolve(isValid))
+    return Promise.resolve(isValid)
   }
 }

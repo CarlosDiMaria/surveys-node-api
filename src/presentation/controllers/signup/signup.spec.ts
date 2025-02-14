@@ -21,7 +21,7 @@ const makeAddAccountStub = (): AddAccount => {
         email: 'valid_email@mail.com',
         password: 'valid_password'
       }
-      return new Promise(resolve => { resolve(fakeAccount) })
+      return Promise.resolve(fakeAccount)
     }
   }
   return new AddAccountStub()
@@ -39,7 +39,7 @@ const makeEmailValidatorStup = (): EmailValidator => {
 const makeAuthStub = (): Authentication => {
   class AuthenticationStub implements Authentication {
     async auth (email: string, password: string): Promise<string | null> {
-      return new Promise(resolve => resolve('any_token'))
+      return Promise.resolve('any_token')
     }
   }
   return new AuthenticationStub()
@@ -218,7 +218,7 @@ describe('SignUp Controller', () => {
 
   test('Should return 401 if no accessToken is generated', async () => {
     const { sut, authStub } = makeSut()
-    jest.spyOn(authStub, 'auth').mockReturnValueOnce(new Promise(resolve => resolve(null)))
+    jest.spyOn(authStub, 'auth').mockReturnValueOnce(Promise.resolve(null))
     const httpRequest = {
       body: {
         name: 'any_name',
@@ -264,7 +264,7 @@ describe('SignUp Controller', () => {
 
   test('Should return 409 if account already exists', async () => {
     const { sut, addAccountStub } = makeSut()
-    jest.spyOn(addAccountStub, 'add').mockReturnValueOnce(new Promise(resolve => resolve(null)))
+    jest.spyOn(addAccountStub, 'add').mockReturnValueOnce(Promise.resolve(null))
     const httpRequest = {
       body: {
         name: 'valid_name',

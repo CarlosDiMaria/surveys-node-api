@@ -13,7 +13,7 @@ describe('LogControllerDecorator', () => {
   const makeSut = (): SutTypes => {
     class ControllerStub implements Controller {
       async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
-        return new Promise((resolve) => resolve({ statusCode: 200, body: {} }))
+        return Promise.resolve({ statusCode: 200, body: {} })
       }
     }
     class LogErrorRepositoryStub implements LogErrorRepository {
@@ -60,7 +60,7 @@ describe('LogControllerDecorator', () => {
     fakeError.stack = 'any_stack'
     const error = serverError(fakeError)
     const logSpy = jest.spyOn(logErrorRepositoryStub, 'log')
-    jest.spyOn(controllerStub, 'handle').mockReturnValueOnce(new Promise((resolve) => resolve(error)))
+    jest.spyOn(controllerStub, 'handle').mockReturnValueOnce(Promise.resolve(error))
     await sut.handle(httpRequest)
     expect(logSpy).toHaveBeenCalledWith('any_stack')
   })

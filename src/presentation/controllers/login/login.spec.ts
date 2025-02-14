@@ -19,7 +19,7 @@ describe('LoginController', () => {
     }
     class AuthenticationStub implements Authentication {
       async auth (email: string, password: string): Promise<string | null> {
-        return new Promise(resolve => resolve('any_token'))
+        return Promise.resolve('any_token')
       }
     }
     const emailValidatorStub = new EmailValidatorStub()
@@ -101,7 +101,7 @@ describe('LoginController', () => {
 
   test('Should return unauthorized if auth returns no token', async () => {
     const { sut, authenticationStub } = makeSut()
-    jest.spyOn(authenticationStub, 'auth').mockReturnValueOnce(new Promise(resolve => resolve(null)))
+    jest.spyOn(authenticationStub, 'auth').mockReturnValueOnce(Promise.resolve(null))
     const response = await sut.handle(httpValidLoginRequest)
     expect(response).toEqual(unauthorized())
   })
