@@ -4,7 +4,7 @@ import { Controller, HttpRequest, HttpResponse } from '../../presentation/protoc
 import { LogControllerDecorator } from './log-controller-decorator'
 
 describe('LogControllerDecorator', () => {
-  interface SutTypes {
+  type SutTypes = {
     controllerStub: Controller
     sut: LogControllerDecorator
     logErrorRepositoryStub: LogErrorRepository

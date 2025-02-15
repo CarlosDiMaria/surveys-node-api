@@ -5,7 +5,7 @@ import { EmailValidator, HttpRequest } from '../../protocols'
 import { LoginController } from './login'
 
 describe('LoginController', () => {
-  interface SutTypes {
+  type SutTypes = {
     sut: LoginController
     emailValidatorStub: EmailValidator
     authenticationStub: Authentication

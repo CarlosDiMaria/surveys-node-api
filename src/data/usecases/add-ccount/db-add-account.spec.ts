@@ -5,7 +5,7 @@ import { Hasher } from '../../protocols/hasher'
 import { DbAddAccount } from './db-add-account'
 
 describe('DbAddAccount UseCase', () => {
-  interface SutTypes {
+  type SutTypes = {
     encrypterStub: Hasher
     sut: DbAddAccount
     addAccountRepositoryStub: AddAccountRepository

@@ -5,7 +5,7 @@ import { Authentication } from '../../../domain/usecases/authentication'
 import { UnauthorizedError } from '../../erros/unauthorized-error'
 import { ConflictError } from '../../erros/conflict-error'
 
-interface SutTypes {
+type SutTypes = {
   sut: SignUpController
   emailValidatorStub: EmailValidator
   addAccountStub: AddAccount

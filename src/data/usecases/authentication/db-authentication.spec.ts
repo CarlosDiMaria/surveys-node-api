@@ -7,7 +7,7 @@ import { UpdateAccessTokenRepository } from '../../protocols/update-access-token
 import { DbAuthentication } from './db-authentication'
 
 describe('DbAuthentication UseCase', () => {
-  interface SutTypes {
+  type SutTypes = {
     sut: Authentication
     loadAccountByEmailRepository: LoadAccountByEmailRepository
     hashComparerStub: HashComparer
