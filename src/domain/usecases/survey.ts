@@ -1,4 +1,4 @@
-import { SurveyModel } from '../models/survey'
+import { SurveyModel, SurveyResultModel } from '../models/survey'
 
 export interface SurveyAnswer {
   image: string
@@ -17,4 +17,14 @@ export interface AddSurvey {
 
 export interface LoadSurvey {
   loadSurveys: () => Promise<SurveyModel[]>
+}
+
+export interface LoadSurveyById {
+  loadById: (id: string) => Promise<SurveyModel[]>
+}
+
+export type SaveSurveyResultModel = Omit<SurveyResultModel, 'id'>
+
+export interface SaveSurveyResult {
+  save: (data: SaveSurveyResultModel) => Promise<SurveyResultModel>
 }

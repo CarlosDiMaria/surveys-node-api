@@ -1,3 +1,4 @@
+import { ObjectId } from 'mongodb'
 import { SurveyRepository } from '../../../../data/protocols/survey-repository'
 import { SurveyModel } from '../../../../domain/models/survey'
 import { AddSurveyModel } from '../../../../domain/usecases/survey'
@@ -16,5 +17,11 @@ export class SurveyMongoRepository implements SurveyRepository {
     const surveys = await surveyCollection.find({}).toArray()
     const surveysAux = surveys.map((s) => MongoHelper.map(s))
     return surveysAux
+  }
+
+  async loadById (id: string): Promise<SurveyModel[]> {
+    const surveyCollection = await MongoHelper.getCollection('survey')
+    const survey = await surveyCollection.findOne({ _id: new ObjectId(id) })
+    return MongoHelper.map(survey)
   }
 }

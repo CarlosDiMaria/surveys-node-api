@@ -41,11 +41,23 @@ describe('SurveyMongoRepository Integration Tests', () => {
     await expect(surveyMongoRepository.loadSurveys()).rejects.toThrow('Insert error')
   })
 
-  test('should load surveyy on loadSurveys success', async () => {
+  test('should load survey if loadById is successfull', async () => {
     await surveyCollection.insertMany(multipleSurveys)
     const dbExistingSurveys = await surveyCollection.find({}).toArray()
     const mappedExistingSurveys = dbExistingSurveys.map(s => MongoHelper.map(s))
     const surveysResponse = await surveyMongoRepository.loadSurveys()
     expect(surveysResponse).toEqual(mappedExistingSurveys)
+  })
+
+  test('should load surveyy on loadSurveys success', async () => {
+    const { insertedIds } = await surveyCollection.insertMany(multipleSurveys)
+    const survey = await surveyMongoRepository.loadById(insertedIds[0].toString())
+    delete (survey as any).id
+    expect(survey).toEqual({ question: 'any_question', answers: [{ answer: 'any_answer', image: 'any_image' }], date: new Date('2023-10-05T12:34:56Z') })
+  })
+
+  test('should throw if finOne fails', async () => {
+    jest.spyOn(MongoHelper, 'connect').mockRejectedValueOnce(new Error('input must be a 24 character hex string, 12 byte Uint8Array, or an integer'))
+    await expect(surveyMongoRepository.loadById('false_id')).rejects.toThrow('input must be a 24 character hex string, 12 byte Uint8Array, or an integer')
   })
 })

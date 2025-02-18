@@ -22,7 +22,15 @@ const makeSurveyRepositoryStub = (): jest.Mocked<SurveyRepository> => {
         }],
         date: new Date('2023-10-05T12:34:56Z')
       }
-    ])
+    ]),
+    loadById: jest.fn().mockResolvedValue({
+      question: 'any_question',
+      answers: [{
+        image: 'any_image',
+        answer: 'any_answer'
+      }],
+      date: new Date('2023-10-05T12:34:56Z')
+    })
   }
 }
 
@@ -97,5 +105,27 @@ describe('DbSurvey', () => {
   test('should handle loadSurveys errors from the repository', async () => {
     surveyRepositoryStub.loadSurveys.mockRejectedValue(new Error('Database error'))
     await expect(dbSurvey.loadSurveys()).rejects.toThrow('Database error')
+  })
+
+  test('should return survey when loadById is successfull', async () => {
+    const surveys = await dbSurvey.loadById('any_id')
+    expect(surveys).toEqual({
+      question: 'any_question',
+      answers: [{
+        image: 'any_image',
+        answer: 'any_answer'
+      }],
+      date: new Date('2023-10-05T12:34:56Z')
+    })
+  })
+
+  test('should call loadById with correct values', async () => {
+    await dbSurvey.loadById('any_id')
+    expect(surveyRepositoryStub.loadById).toHaveBeenCalledWith('any_id')
+  })
+
+  test('should handle loadSurveys errors from the repository', async () => {
+    surveyRepositoryStub.loadById.mockRejectedValueOnce(new Error('Database error'))
+    await expect(dbSurvey.loadById('any_id')).rejects.toThrow('Database error')
   })
 })
