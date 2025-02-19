@@ -57,7 +57,7 @@ describe('Auth Middleware', () => {
 
   test('Should return 200 loadAccountByToken returns an account', async () => {
     const httpResponse = await sut.handle(httpRequest)
-    expect(httpResponse).toEqual(ok({ accountId: 'any_id' }))
+    expect(httpResponse).toEqual(ok({ userId: 'any_id' }))
   })
 
   test('Should return 500 if loadAccountByToken throws', async () => {
