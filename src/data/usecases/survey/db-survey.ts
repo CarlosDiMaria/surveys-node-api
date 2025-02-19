@@ -15,7 +15,7 @@ export class DbSurvey implements AddSurvey, LoadSurvey, LoadSurveyById {
     return await this.surveyRepository.loadSurveys()
   }
 
-  async loadById (id: string): Promise<SurveyModel[]> {
+  async loadById (id: string): Promise<SurveyModel | null> {
     return await this.surveyRepository.loadById(id)
   }
 }

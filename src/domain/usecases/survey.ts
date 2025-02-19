@@ -20,7 +20,7 @@ export interface LoadSurvey {
 }
 
 export interface LoadSurveyById {
-  loadById: (id: string) => Promise<SurveyModel[]>
+  loadById: (id: string) => Promise<SurveyModel | null>
 }
 
 export type SaveSurveyResultModel = Omit<SurveyResultModel, 'id'>
