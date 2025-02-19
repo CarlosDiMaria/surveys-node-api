@@ -1,5 +1,9 @@
 import { accountSchema } from './schemas/account-schema'
 import { loginSchema } from './schemas/login-schema'
+import { errorSchema } from './schemas/error-schema'
+import badRequestComponent from './components/bad-request-component'
+import serverErrorComponent from './components/server-error-component'
+import unauthorizedErrorComponent from './components/unauthorized-error-component'
 
 export default {
   openapi: '3.0.0',
@@ -40,6 +44,15 @@ export default {
                 }
               }
             }
+          },
+          400: {
+            $ref: '#/components/badRequestComponent'
+          },
+          500: {
+            $ref: '#/components/serverErrorComponent'
+          },
+          401: {
+            $ref: '#/components/unauthorizedErrorComponent'
           }
         }
       }
@@ -47,6 +60,12 @@ export default {
   },
   schemas: {
     accountSchema,
-    loginSchema
+    loginSchema,
+    errorSchema
+  },
+  components: {
+    badRequestComponent,
+    serverErrorComponent,
+    unauthorizedErrorComponent
   }
 }
