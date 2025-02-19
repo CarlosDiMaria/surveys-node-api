@@ -4,13 +4,15 @@ import { errorSchema } from './schemas/error-schema'
 import { surveyAnswerSchema } from './schemas/surveyAnswerSchema'
 import { surveySchema } from './schemas/surveySchema'
 import { surveysSchema } from './schemas/surveysSchema'
+import { apiKeyAuthSchema } from './schemas/api-key-auth-schema'
+import { signupSchema } from './schemas/signupSchema'
 import badRequestComponent from './components/bad-request-component'
 import serverErrorComponent from './components/server-error-component'
 import unauthorizedErrorComponent from './components/unauthorized-error-component'
 import loginPath from './paths/login-path'
 import surveysPath from './paths/surveys-path'
 import forbiddenErrorComponent from './components/forbidden-error-component'
-import { apiKeyAuthSchema } from './schemas/api-key-auth-schema'
+import signupPath from './paths/signup-path'
 
 export default {
   openapi: '3.0.0',
@@ -30,7 +32,8 @@ export default {
   ],
   paths: {
     '/login': loginPath,
-    '/surveys': surveysPath
+    '/surveys': surveysPath,
+    '/signup': signupPath
   },
   schemas: {
     accountSchema,
@@ -38,7 +41,8 @@ export default {
     errorSchema,
     surveySchema,
     surveysSchema,
-    surveyAnswerSchema
+    surveyAnswerSchema,
+    signupSchema
   },
   components: {
     securitySchemes: {
