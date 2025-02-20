@@ -2,7 +2,7 @@ import env from '../../../../main/config/env'
 import { Collection } from 'mongodb'
 import { SurveyResultMongoRepository } from './survey-result-repository'
 import { MongoHelper } from '../mongo-helper/mongo-helper'
-import { AddSurveyModel } from '../../../../domain/usecases/survey'
+import { AddSurveyModel, SaveSurveyResultModel } from '../../../../domain/usecases/survey'
 import { AddAccountModel } from '../../../../domain/usecases/add-account'
 
 describe('SurveyResultMongoRepository Integration Tests', () => {
@@ -10,7 +10,7 @@ describe('SurveyResultMongoRepository Integration Tests', () => {
   let surveyCollection: Collection
   let accountCollection: Collection
   const surveyResultMongoRepository = new SurveyResultMongoRepository()
-  const saveSurveyResultData = {
+  const saveSurveyResultData: SaveSurveyResultModel = {
     surveyId: 'any_id',
     userId: 'any_id',
     answer: 'any_answer',
@@ -63,8 +63,9 @@ describe('SurveyResultMongoRepository Integration Tests', () => {
     const result = await surveyResultMongoRepository.save(saveSurveyResultData)
     expect(result).toBeTruthy()
     expect(result?.surveyId).toEqual(survey.insertedId)
-    expect(result?.userId).toEqual(account.insertedId)
-    expect(result?.answer).toBe(addSurvey.answers[0].answer)
+    expect(result?.answers?.[0]?.answer).toBe(saveSurveyResultData.answer)
+    expect(result?.answers?.[0]?.count).toBe(1)
+    expect(result?.answers?.[0]?.percent).toBe(100)
     expect(result?.date).toEqual(new Date('2023-10-05T12:34:56Z'))
   })
 
@@ -73,8 +74,8 @@ describe('SurveyResultMongoRepository Integration Tests', () => {
     const insertedSurvey = await surveyCollection.findOne({ _id: survey.insertedId })
     const account = await accountCollection.insertOne(addAccount)
     await surveyResultsCollection.insertOne({
-      surveyId: survey.insertedId.toString(),
-      userId: account.insertedId.toString(),
+      surveyId: survey.insertedId,
+      userId: account.insertedId,
       answer: insertedSurvey?.answers?.[0]?.answer,
       date: new Date('2023-10-05T12:33:33Z')
     })
@@ -84,8 +85,9 @@ describe('SurveyResultMongoRepository Integration Tests', () => {
     const result = await surveyResultMongoRepository.save(saveSurveyResultData)
     expect(result).toBeTruthy()
     expect(result?.surveyId).toEqual(survey.insertedId)
-    expect(result?.userId).toEqual(account.insertedId)
-    expect(result?.answer).toBe(addSurvey.answers[1].answer)
+    expect(result?.answers?.[0]?.answer).toBe(saveSurveyResultData.answer)
+    expect(result?.answers?.[0]?.count).toBe(1)
+    expect(result?.answers?.[0]?.percent).toBe(100)
     expect(result?.date).toEqual(new Date('2023-10-05T12:34:56Z'))
   })
 

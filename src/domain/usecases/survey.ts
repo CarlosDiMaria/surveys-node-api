@@ -23,7 +23,12 @@ export interface LoadSurveyById {
   loadById: (id: string) => Promise<SurveyModel | null>
 }
 
-export type SaveSurveyResultModel = Omit<SurveyResultModel, 'id'>
+export type SaveSurveyResultModel = {
+  surveyId: string
+  userId: string
+  answer: string
+  date: Date
+}
 
 export interface SaveSurveyResult {
   save: (data: SaveSurveyResultModel) => Promise<SurveyResultModel>

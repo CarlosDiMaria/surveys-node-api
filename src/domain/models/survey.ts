@@ -1,6 +1,11 @@
-export interface SurveyAnswerModel {
+type SurveyAnswerModel = {
   image: string
   answer: string
+}
+
+type SurveyResultAnswerModel = SurveyAnswerModel & {
+  count: number
+  percent: number
 }
 
 export interface SurveyModel {
@@ -10,9 +15,8 @@ export interface SurveyModel {
 }
 
 export interface SurveyResultModel {
-  id: string
   surveyId: string
-  userId: string
-  answer: string
+  question: string
+  answers: SurveyResultAnswerModel[]
   date: Date
 }
