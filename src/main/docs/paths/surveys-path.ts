@@ -1,7 +1,7 @@
 export default {
   get: {
     security: [{ apiKeyAuthSchema: [] }],
-    tags: ['Enquete'],
+    tags: ['Surveys'],
     summary: 'API to list all user polls.',
     responses: {
       200: {
@@ -24,7 +24,7 @@ export default {
   },
   post: {
     security: [{ apiKeyAuthSchema: [] }],
-    tags: ['Enquete'],
+    tags: ['Surveys'],
     summary: 'API to create a poll.',
     requestBody: {
       content: {

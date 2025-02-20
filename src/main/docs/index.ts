@@ -29,7 +29,7 @@ export default {
   ],
   tags: [
     { name: 'Login' },
-    { name: 'Enquete' }
+    { name: 'Surveys' }
   ],
   paths: {
     '/login': loginPath,
