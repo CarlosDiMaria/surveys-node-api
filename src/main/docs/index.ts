@@ -13,6 +13,7 @@ import loginPath from './paths/login-path'
 import surveysPath from './paths/surveys-path'
 import forbiddenErrorComponent from './components/forbidden-error-component'
 import signupPath from './paths/signup-path'
+import { addSurveySchema } from './schemas/addSurveySchema'
 
 export default {
   openapi: '3.0.0',
@@ -42,7 +43,8 @@ export default {
     surveySchema,
     surveysSchema,
     surveyAnswerSchema,
-    signupSchema
+    signupSchema,
+    addSurveySchema
   },
   components: {
     securitySchemes: {

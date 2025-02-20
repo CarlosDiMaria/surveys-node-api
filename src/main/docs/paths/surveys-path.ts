@@ -21,5 +21,33 @@ export default {
         $ref: '#/components/forbiddenErrorComponent'
       }
     }
+  },
+  post: {
+    security: [{ apiKeyAuthSchema: [] }],
+    tags: ['Enquete'],
+    summary: 'API to create a poll.',
+    requestBody: {
+      content: {
+        'application/json': {
+          schema: {
+            $ref: '#/schemas/addSurveySchema'
+          }
+        }
+      }
+    },
+    responses: {
+      204: {
+        description: 'Sucesso'
+      },
+      400: {
+        $ref: '#/components/badRequestComponent'
+      },
+      500: {
+        $ref: '#/components/serverErrorComponent'
+      },
+      403: {
+        $ref: '#/components/forbiddenErrorComponent'
+      }
+    }
   }
 }
