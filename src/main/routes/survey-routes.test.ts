@@ -24,11 +24,11 @@ describe('Survey Routes Test', () => {
     await MongoHelper.disconnect()
   })
 
-  describe('POST /survey', () => {
+  describe('POST /surveys', () => {
     test('Ensure survey route exists and returns status 403 if no accessToken', async () => {
       const survey = { question: 'Any Question', answers: [{ answer: 'Answer 1' }] }
       await request(app)
-        .post('/api/survey')
+        .post('/api/surveys')
         .send(survey)
         .expect(403)
     })
@@ -47,7 +47,7 @@ describe('Survey Routes Test', () => {
       )
       const survey = { question: 'Any Question', answers: [{ answer: 'Answer 1' }] }
       await request(app)
-        .post('/api/survey')
+        .post('/api/surveys')
         .set('x-access-token', accessToken)
         .send(survey)
         .expect(204)
@@ -67,7 +67,7 @@ describe('Survey Routes Test', () => {
       )
       const survey = { question: '', answers: [{ answer: 'Answer 1' }] }
       await request(app)
-        .post('/api/survey')
+        .post('/api/surveys')
         .set('x-access-token', accessToken)
         .send(survey)
         .expect(400)

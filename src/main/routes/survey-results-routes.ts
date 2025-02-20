@@ -6,5 +6,5 @@ import { makeSaveSurveyResultController } from '../factories/save-ruvey-results'
 
 export default (router: Router): void => {
   const userAuth = adaptMiddleware(makeAuthMiddleware())
-  router.put('/survey/:surveyId/results', userAuth, adaptRoute(makeSaveSurveyResultController()))
+  router.put('/surveys/:surveyId/results', userAuth, adaptRoute(makeSaveSurveyResultController()))
 }

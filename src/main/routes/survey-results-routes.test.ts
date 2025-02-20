@@ -27,10 +27,10 @@ describe('Survey Routes Test', () => {
     await MongoHelper.disconnect()
   })
 
-  describe('PUT /survey/:surveyId/results', () => {
+  describe('PUT /surveys/:surveyId/results', () => {
     test('Ensure survey route exists and returns status 403 if no accessToken', async () => {
       await request(app)
-        .put('/api/survey/:surveyId/results')
+        .put('/api/surveys/:surveyId/results')
         .send({
           answer: ''
         })
@@ -62,7 +62,7 @@ describe('Survey Routes Test', () => {
         { $set: { accessToken } }
       )
       await request(app)
-        .put(`/api/survey/${res.insertedId.toString()}/results`)
+        .put(`/api/surveys/${res.insertedId.toString()}/results`)
         .set('x-access-token', accessToken)
         .send({
           answer: 'Answer 1'
