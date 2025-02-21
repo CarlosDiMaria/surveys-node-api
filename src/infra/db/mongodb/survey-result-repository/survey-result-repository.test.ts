@@ -43,7 +43,7 @@ describe('SurveyResultMongoRepository Integration Tests', () => {
   beforeEach(async () => {
     surveyResultsCollection = await MongoHelper.getCollection('surveyResults')
     await surveyResultsCollection.deleteMany({})
-    surveyCollection = await MongoHelper.getCollection('survey')
+    surveyCollection = await MongoHelper.getCollection('surveys')
     await surveyCollection.deleteMany({})
     accountCollection = await MongoHelper.getCollection('account')
     await accountCollection.deleteMany({})

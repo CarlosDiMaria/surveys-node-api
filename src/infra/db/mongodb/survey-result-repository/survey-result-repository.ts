@@ -48,7 +48,7 @@ export class SurveyResultMongoRepository implements SurveyResultRepository {
       },
       {
         $lookup: {
-          from: 'survey',
+          from: 'surveys',
           foreignField: '_id',
           localField: 'data.surveyId',
           as: 'survey'

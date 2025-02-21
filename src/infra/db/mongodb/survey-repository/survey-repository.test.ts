@@ -14,7 +14,7 @@ describe('SurveyMongoRepository Integration Tests', () => {
   })
 
   beforeEach(async () => {
-    surveyCollection = await MongoHelper.getCollection('survey')
+    surveyCollection = await MongoHelper.getCollection('surveys')
     await surveyCollection.deleteMany({})
   })
 
@@ -25,7 +25,7 @@ describe('SurveyMongoRepository Integration Tests', () => {
   test('should insert a survey and return true', async () => {
     const result = await surveyMongoRepository.add(surveyData)
     expect(result).toBe(true)
-    const collection = await MongoHelper.getCollection('survey')
+    const collection = await MongoHelper.getCollection('surveys')
     const insertedSurvey = await collection.findOne({ question: 'any_question' })
     expect(insertedSurvey).toBeTruthy()
     expect(insertedSurvey?.question).toBe('any_question')

@@ -14,7 +14,7 @@ describe('Survey Routes Test', () => {
   })
 
   beforeEach(async () => {
-    surveyCollection = await MongoHelper.getCollection('survey')
+    surveyCollection = await MongoHelper.getCollection('surveys')
     accountCollection = await MongoHelper.getCollection('account')
     await surveyCollection.deleteMany({})
     await accountCollection.deleteMany({})

@@ -6,21 +6,21 @@ import { MongoHelper } from '../mongo-helper/mongo-helper'
 
 export class SurveyMongoRepository implements SurveyRepository {
   async add (data: AddSurveyModel): Promise<boolean> {
-    const surveyCollection = await MongoHelper.getCollection('survey')
+    const surveyCollection = await MongoHelper.getCollection('surveys')
     const result = await surveyCollection.insertOne(data)
     if (result?.insertedId) return true
     return false
   }
 
   async loadSurveys (): Promise<SurveyModel[]> {
-    const surveyCollection = await MongoHelper.getCollection('survey')
+    const surveyCollection = await MongoHelper.getCollection('surveys')
     const surveys = await surveyCollection.find({}).toArray()
     const surveysAux = surveys.map((s) => MongoHelper.map(s))
     return surveysAux
   }
 
   async loadById (id: string): Promise<SurveyModel | null> {
-    const surveyCollection = await MongoHelper.getCollection('survey')
+    const surveyCollection = await MongoHelper.getCollection('surveys')
     const survey = await surveyCollection.findOne({ _id: new ObjectId(id) })
     if (!survey) {
       return Promise.resolve(null)
