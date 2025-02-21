@@ -17,6 +17,7 @@ import forbiddenErrorComponent from './components/forbidden-error-component'
 import signupPath from './paths/signup-path'
 import surveysResultPath from './paths/surveys-result-path'
 import { surveyResultSchema } from './schemas/surveyResultSchema'
+import { surveyResultAnswerSchema } from './schemas/surveyResultAnswerSchema'
 
 export default {
   openapi: '3.0.0',
@@ -50,7 +51,8 @@ export default {
     signupSchema,
     addSurveySchema,
     surveyResultSchema,
-    surveyResultParamsSchema
+    surveyResultParamsSchema,
+    surveyResultAnswerSchema
   },
   components: {
     securitySchemes: {
