@@ -30,6 +30,23 @@ describe('SurveyResultMongoRepository Integration Tests', () => {
     date: new Date('2023-10-05T12:34:56Z')
   }
 
+  const addSurvey2: AddSurveyModel = {
+    question: 'any_question',
+    answers: [{
+      answer: 'any_answer_1',
+      image: 'any_image_1'
+    },
+    {
+      answer: 'any_answer_2',
+      image: 'any_image_2'
+    },
+    {
+      answer: 'any_answer_3',
+      image: 'any_image_3'
+    }],
+    date: new Date('2023-10-05T12:34:56Z')
+  }
+
   const addAccount: AddAccountModel = {
     name: 'valid_name',
     email: 'valid_email',
@@ -102,7 +119,7 @@ describe('SurveyResultMongoRepository Integration Tests', () => {
     await expect(surveyResultMongoRepository.save(saveSurveyResultData)).rejects.toThrow('Insert error')
   })
 
-  test('should load surveyResult when loadSurveyById is successfull', async () => {
+  test('should load surveyResult when loadSurveyById is successfull 4 answers test', async () => {
     const survey = await surveyCollection.insertOne(addSurvey)
     const insertedSurvey = await surveyCollection.findOne({ _id: survey.insertedId })
     const account = await accountCollection.insertOne(addAccount)
@@ -139,5 +156,54 @@ describe('SurveyResultMongoRepository Integration Tests', () => {
     expect(result?.answers?.[1]?.answer).toBe('any_answer_2')
     expect(result?.answers?.[1]?.count).toBe(1)
     expect(result?.answers?.[1]?.percent).toBe(25)
+  })
+
+  test('should load surveyResult when loadSurveyById is successfull 5 answers test', async () => {
+    const survey = await surveyCollection.insertOne(addSurvey2)
+    const insertedSurvey = await surveyCollection.findOne({ _id: survey.insertedId })
+    const account = await accountCollection.insertOne(addAccount)
+    await surveyResultsCollection.insertOne({
+      surveyId: survey.insertedId,
+      userId: account.insertedId,
+      answer: insertedSurvey?.answers?.[0]?.answer,
+      date: new Date('2023-10-05T12:33:33Z')
+    })
+    await surveyResultsCollection.insertOne({
+      surveyId: survey.insertedId,
+      userId: account.insertedId,
+      answer: insertedSurvey?.answers?.[0]?.answer,
+      date: new Date('2023-10-05T12:33:33Z')
+    })
+    await surveyResultsCollection.insertOne({
+      surveyId: survey.insertedId,
+      userId: account.insertedId,
+      answer: insertedSurvey?.answers?.[0]?.answer,
+      date: new Date('2023-10-05T12:33:33Z')
+    })
+    await surveyResultsCollection.insertOne({
+      surveyId: survey.insertedId,
+      userId: account.insertedId,
+      answer: insertedSurvey?.answers?.[1]?.answer,
+      date: new Date('2023-10-05T12:33:33Z')
+    })
+    await surveyResultsCollection.insertOne({
+      surveyId: survey.insertedId,
+      userId: account.insertedId,
+      answer: insertedSurvey?.answers?.[2]?.answer,
+      date: new Date('2023-10-05T12:33:33Z')
+    })
+    const result = await surveyResultMongoRepository.loadBySurveyId(survey.insertedId.toString())
+    console.log(result)
+    expect(result).toBeTruthy()
+    expect(result?.surveyId).toEqual(survey.insertedId)
+    expect(result?.answers?.[0]?.answer).toBe('any_answer_1')
+    expect(result?.answers?.[0]?.count).toBe(3)
+    expect(result?.answers?.[0]?.percent).toBe(60)
+    expect(result?.answers?.[1]?.answer).toBe('any_answer_2')
+    expect(result?.answers?.[1]?.count).toBe(1)
+    expect(result?.answers?.[1]?.percent).toBe(20)
+    expect(result?.answers?.[2]?.answer).toBe('any_answer_3')
+    expect(result?.answers?.[2]?.count).toBe(1)
+    expect(result?.answers?.[2]?.percent).toBe(20)
   })
 })
