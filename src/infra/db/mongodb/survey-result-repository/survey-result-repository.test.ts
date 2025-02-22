@@ -66,6 +66,9 @@ describe('SurveyResultMongoRepository Integration Tests', () => {
     expect(result?.answers?.[0]?.answer).toBe(saveSurveyResultData.answer)
     expect(result?.answers?.[0]?.count).toBe(1)
     expect(result?.answers?.[0]?.percent).toBe(100)
+    expect(result?.answers?.[1]?.answer).toBe('any_answer_2')
+    expect(result?.answers?.[1]?.count).toBe(0)
+    expect(result?.answers?.[1]?.percent).toBe(0)
     expect(result?.date).toEqual(new Date('2023-10-05T12:34:56Z'))
   })
 
@@ -88,6 +91,9 @@ describe('SurveyResultMongoRepository Integration Tests', () => {
     expect(result?.answers?.[0]?.answer).toBe(saveSurveyResultData.answer)
     expect(result?.answers?.[0]?.count).toBe(1)
     expect(result?.answers?.[0]?.percent).toBe(100)
+    expect(result?.answers?.[1]?.answer).toBe('any_answer_1')
+    expect(result?.answers?.[1]?.count).toBe(0)
+    expect(result?.answers?.[1]?.percent).toBe(0)
     expect(result?.date).toEqual(new Date('2023-10-05T12:34:56Z'))
   })
 

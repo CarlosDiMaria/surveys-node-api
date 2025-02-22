@@ -66,36 +66,37 @@ export class SurveyResultMongoRepository implements SurveyResultRepository {
             question: '$survey.question',
             date: '$survey.date',
             total: '$count',
-            answer: {
-              $filter: {
-                input: '$survey.answers',
-                as: 'item',
-                cond: {
-                  $eq: [
-                    '$$item.answer',
-                    '$data.answer'
-                  ]
-                }
-              }
-            }
+            answers: '$survey.answers'
           },
-          count: {
-            $sum: 1
+          votes: {
+            $push: '$data.answer'
           }
         }
       },
       {
         $unwind: {
-          path: '$_id.answer'
+          path: '$_id.answers'
         }
       },
       {
         $addFields: {
-          '_id.answer.count': '$count',
-          '_id.answer.percent': {
+          answerCount: {
+            $size: {
+              $filter: {
+                input: '$votes',
+                as: 'vote',
+                cond: { $eq: ['$$vote', '$_id.answers.answer'] }
+              }
+            }
+          }
+        }
+      },
+      {
+        $addFields: {
+          percent: {
             $multiply: [
               {
-                $divide: ['$count', '$_id.total']
+                $divide: ['$answerCount', '$_id.total']
               },
               100
             ]
@@ -110,7 +111,11 @@ export class SurveyResultMongoRepository implements SurveyResultRepository {
             date: '$_id.date'
           },
           answers: {
-            $push: '$_id.answer'
+            $push: {
+              answer: '$_id.answers.answer',
+              count: '$answerCount',
+              percent: '$percent'
+            }
           }
         }
       },
@@ -120,7 +125,12 @@ export class SurveyResultMongoRepository implements SurveyResultRepository {
           surveyId: '$_id.surveyId',
           question: '$_id.question',
           date: '$_id.date',
-          answers: '$answers'
+          answers: {
+            $sortArray: {
+              input: '$answers',
+              sortBy: { percent: -1 }
+            }
+          }
         }
       }
     ])
