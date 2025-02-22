@@ -33,3 +33,7 @@ export type SaveSurveyResultModel = {
 export interface SaveSurveyResult {
   save: (data: SaveSurveyResultModel) => Promise<SurveyResultModel>
 }
+
+export interface LoadSurveyResult {
+  loadBySurveyId: (surveyId: string) => Promise<SurveyResultModel>
+}

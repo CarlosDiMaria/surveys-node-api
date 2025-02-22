@@ -101,4 +101,43 @@ describe('SurveyResultMongoRepository Integration Tests', () => {
     jest.spyOn(MongoHelper, 'getCollection').mockRejectedValueOnce(new Error('Insert error'))
     await expect(surveyResultMongoRepository.save(saveSurveyResultData)).rejects.toThrow('Insert error')
   })
+
+  test('should load surveyResult when loadSurveyById is successfull', async () => {
+    const survey = await surveyCollection.insertOne(addSurvey)
+    const insertedSurvey = await surveyCollection.findOne({ _id: survey.insertedId })
+    const account = await accountCollection.insertOne(addAccount)
+    await surveyResultsCollection.insertOne({
+      surveyId: survey.insertedId,
+      userId: account.insertedId,
+      answer: insertedSurvey?.answers?.[0]?.answer,
+      date: new Date('2023-10-05T12:33:33Z')
+    })
+    await surveyResultsCollection.insertOne({
+      surveyId: survey.insertedId,
+      userId: account.insertedId,
+      answer: insertedSurvey?.answers?.[0]?.answer,
+      date: new Date('2023-10-05T12:33:33Z')
+    })
+    await surveyResultsCollection.insertOne({
+      surveyId: survey.insertedId,
+      userId: account.insertedId,
+      answer: insertedSurvey?.answers?.[0]?.answer,
+      date: new Date('2023-10-05T12:33:33Z')
+    })
+    await surveyResultsCollection.insertOne({
+      surveyId: survey.insertedId,
+      userId: account.insertedId,
+      answer: insertedSurvey?.answers?.[1]?.answer,
+      date: new Date('2023-10-05T12:33:33Z')
+    })
+    const result = await surveyResultMongoRepository.loadBySurveyId(survey.insertedId.toString())
+    expect(result).toBeTruthy()
+    expect(result?.surveyId).toEqual(survey.insertedId)
+    expect(result?.answers?.[0]?.answer).toBe('any_answer_1')
+    expect(result?.answers?.[0]?.count).toBe(3)
+    expect(result?.answers?.[0]?.percent).toBe(75)
+    expect(result?.answers?.[1]?.answer).toBe('any_answer_2')
+    expect(result?.answers?.[1]?.count).toBe(1)
+    expect(result?.answers?.[1]?.percent).toBe(25)
+  })
 })

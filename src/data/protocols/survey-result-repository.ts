@@ -3,4 +3,5 @@ import { SaveSurveyResultModel } from '../../domain/usecases/survey'
 
 export interface SurveyResultRepository {
   save: (data: SaveSurveyResultModel) => Promise<SurveyResultModel>
+  loadBySurveyId: (surveyId: string) => Promise<SurveyResultModel>
 }

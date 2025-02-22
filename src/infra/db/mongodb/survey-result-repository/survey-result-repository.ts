@@ -18,11 +18,11 @@ export class SurveyResultMongoRepository implements SurveyResultRepository {
     }, {
       upsert: true
     })
-    const surveyResult = await this.loadBySurveyId(data.surveyId.toString(), data.userId)
+    const surveyResult = await this.loadBySurveyId(data.surveyId.toString())
     return surveyResult
   }
 
-  private async loadBySurveyId (surveyId: string, userId: string): Promise<SurveyResultModel> {
+  async loadBySurveyId (surveyId: string): Promise<SurveyResultModel> {
     const surveyResultCollection = await MongoHelper.getCollection('surveyResults')
     const query = surveyResultCollection.aggregate([
       {
