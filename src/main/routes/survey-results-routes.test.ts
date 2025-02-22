@@ -70,4 +70,43 @@ describe('Survey Routes Test', () => {
         .expect(200)
     })
   })
+
+  describe('GET /surveys/:surveyId/results', () => {
+    test('Ensure survey route exists and returns status 403 if no accessToken', async () => {
+      await request(app)
+        .get('/api/surveys/any_id/results')
+        .expect(403)
+    })
+
+    test('Should return 200 on load survey result with accessToken', async () => {
+      const res = await surveyCollection.insertOne({
+        question: 'Question',
+        answers: [
+          {
+            answer: 'Answer 1',
+            image: 'http: //image-name.com'
+          },
+          {
+            answer: 'Answer 2',
+            image: 'http: //image2-name.com'
+          }
+        ],
+        date: new Date()
+      })
+      const account = await accountCollection.insertOne({
+        name: 'any_name',
+        email: 'any_email@mail.com',
+        password: 'any_password'
+      })
+      const accessToken = sign({ id: account.insertedId.toString() }, env.jwtSecret)
+      await accountCollection.updateOne(
+        { _id: account.insertedId },
+        { $set: { accessToken } }
+      )
+      await request(app)
+        .get(`/api/surveys/${res.insertedId.toString()}/results`)
+        .set('x-access-token', accessToken)
+        .expect(200)
+    })
+  })
 })
