@@ -193,7 +193,6 @@ describe('SurveyResultMongoRepository Integration Tests', () => {
       date: new Date('2023-10-05T12:33:33Z')
     })
     const result = await surveyResultMongoRepository.loadBySurveyId(survey.insertedId.toString())
-    console.log(result)
     expect(result).toBeTruthy()
     expect(result?.surveyId).toEqual(survey.insertedId)
     expect(result?.answers?.[0]?.answer).toBe('any_answer_1')
