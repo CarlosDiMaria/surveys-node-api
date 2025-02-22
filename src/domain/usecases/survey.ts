@@ -35,5 +35,5 @@ export interface SaveSurveyResult {
 }
 
 export interface LoadSurveyResult {
-  loadBySurveyId: (surveyId: string) => Promise<SurveyResultModel>
+  loadBySurveyId: (surveyId: string) => Promise<SurveyResultModel | null>
 }
