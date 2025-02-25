@@ -7,6 +7,6 @@ export default gql`
 
   type Account {
     accessToken: String!
-    name: String!
+    email: String!
   }
 `

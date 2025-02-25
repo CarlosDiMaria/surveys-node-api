@@ -117,6 +117,6 @@ describe('LoginController', () => {
   test('Should return token on success', async () => {
     const { sut } = makeSut()
     const response = await sut.handle(httpValidLoginRequest)
-    expect(response).toEqual(ok({ accessToken: 'any_token' }))
+    expect(response).toEqual(ok({ accessToken: 'any_token', email: 'any_email@mail.com' }))
   })
 })
