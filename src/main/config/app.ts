@@ -1,10 +1,12 @@
 import express from 'express'
 import setUpMiddlewares from './middlewares'
 import setUpRoutes from './routes'
-import SetupSwagger from './config-swagger'
+import setupSwagger from './config-swagger'
+import setupApolloServer from './apollo-server'
 
 const app = express()
-SetupSwagger(app)
+setupApolloServer(app)
+setupSwagger(app)
 setUpMiddlewares(app)
 setUpRoutes(app)
 export default app
