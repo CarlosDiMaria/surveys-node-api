@@ -2,7 +2,7 @@ import { gql } from 'apollo-server-express'
 
 export default gql`
   extend type Query {
-    load: [Survey]
+    load: [Survey!] @auth
   }
 
   type SurveyAnswerModel {
@@ -13,7 +13,7 @@ export default gql`
   type Survey {
     id: ID!
     question: String!
-    answers: [SurveyAnswerModel]
+    answers: [SurveyAnswerModel!]
     date: String!
   }
 `
