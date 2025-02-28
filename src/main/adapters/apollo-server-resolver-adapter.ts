@@ -3,7 +3,7 @@ import { Controller } from '../../presentation/protocols'
 
 export const adaptResolver = async (controller: Controller, args?: any): Promise<any> => {
   const request = { ...(args ?? {}) }
-  const httpResponse = await controller.handle({ body: request })
+  const httpResponse = await controller.handle({ body: request.body, params: request.params, userId: request?.userId })
   switch (httpResponse.statusCode) {
     case 200:
     case 204: return httpResponse.body

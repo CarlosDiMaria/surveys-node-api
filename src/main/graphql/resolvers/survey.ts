@@ -3,6 +3,6 @@ import { makeLoadSurveyController } from '../../factories/load-surveys'
 
 export default {
   Query: {
-    load: async (parent: any, args: any) => adaptResolver(makeLoadSurveyController(), args)
+    load: async (parent: any, args: any) => adaptResolver(makeLoadSurveyController(), { body: args })
   }
 }
